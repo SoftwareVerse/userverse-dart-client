@@ -1,6 +1,7 @@
 name: userverse_dart_client
 description: A Dart client for integrating with the Userverse platform.
 version: 0.0.1
+
 homepage: https://github.com/SoftwareVerse
 repository: https://github.com/SoftwareVerse/userverse-dart-client
 issue_tracker: https://github.com/SoftwareVerse/userverse-dart-client/issues
@@ -8,37 +9,16 @@ issue_tracker: https://github.com/SoftwareVerse/userverse-dart-client/issues
 environment:
   sdk: ">=3.2.0 <4.0.0"
 
-# Optional but recommended:
 topics:
   - user-management
   - rbac
   - multi-tenancy
   - client
 
-# Dependencies
 dependencies:
   http: ^1.4.0
 
-# Dev dependencies for testing and formatting
 dev_dependencies:
   lints: ^5.0.0
-  test: ^1.24.0
-
-
-
-name: userverse_dart_client
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
-
-environment:
-  sdk: ^3.8.1
-
-# Add regular dependencies here.
-dependencies:
-  http: ^1.4.0
-  # path: ^1.8.0
-
-dev_dependencies:
-  lints: ^5.0.0
+  mockito: ^5.4.4
   test: ^1.24.0

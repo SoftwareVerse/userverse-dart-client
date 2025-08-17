@@ -1,8 +1,4 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
-library;
+library userverse_dart_client;
 
-export 'src/userverse_dart_client_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/client/userverse_client.dart';
+export 'src/models/models.dart';
