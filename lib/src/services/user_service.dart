@@ -1,57 +1,43 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import '../models/models.dart';
+import '../utils/base_api.dart';
+import '../utils/hash_password.dart';
 
 class UserService {
-  UserService({
-    required http.Client client,
-    required String baseUrl,
-  })  : _client = client,
-        _baseUrl = baseUrl;
+  UserService(this._apiService);
 
-  final http.Client _client;
-  final String _baseUrl;
+  final BaseApiService _apiService;
 
   Future<TokenResponse> login({
     required String username,
     required String password,
   }) async {
-    final headers = {
-      'Authorization': 'Basic ${base64Encode(utf8.encode('$username:$password'))}',
-      'Content-Type': 'application/json',
-    };
-    final response = await _client.patch(
-      Uri.parse('$_baseUrl/user/login'),
-      headers: headers,
+    final hashedPassword = AuthUtil.hashPassword(password);
+    final result = await _apiService.patch(
+      '/user/login',
+      basicAuthUsername: username,
+      basicAuthPassword: hashedPassword,
     );
-    final json = jsonDecode(response.body) as Map<String, dynamic>;
-
-    if (response.statusCode == 202) {
-
-      final data = json['data'] as Map<String, dynamic>;
+    if (result['success']) {
+      final data = result['data'] as Map<String, dynamic>;
       return TokenResponse.fromMap(data);
     } else {
-      print('Login failed: $json');
-      throw Exception('Failed to login');
+      throw ApiException(
+        message: result['message'] ?? 'Failed to login',
+        responseBody: result,
+      );
     }
   }
 
-  Future<UserRead> getMe({required String token}) async {
-    final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    };
-    final response = await _client.get(
-      Uri.parse('$_baseUrl/user'),
-      headers: headers,
-    );
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      final data = json['data'] as Map<String, dynamic>;
+  Future<UserRead> getMe() async {
+    final result = await _apiService.get('/user');
+    if (result['success']) {
+      final data = result['data'] as Map<String, dynamic>;
       return UserRead.fromMap(data);
     } else {
-      throw Exception('Failed to get user');
+      throw ApiException(
+        message: result['message'] ?? 'Failed to get user',
+        responseBody: result,
+      );
     }
   }
 
@@ -60,45 +46,39 @@ class UserService {
     required String password,
     required UserCreate userCreate,
   }) async {
-    final headers = {
-      'Authorization': 'Basic ${base64Encode(utf8.encode('$username:$password'))}',
-      'Content-Type': 'application/json',
-    };
-    final response = await _client.post(
-      Uri.parse('$_baseUrl/user'),
-      headers: headers,
+    final hashedPassword = AuthUtil.hashPassword(password);
+    final result = await _apiService.post(
+      '/user',
       body: userCreate.toJson(),
+      basicAuthUsername: username,
+      basicAuthPassword: hashedPassword,
     );
 
-    if (response.statusCode == 201) {
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      final data = json['data'] as Map<String, dynamic>;
+    if (result['success']) {
+      final data = result['data'] as Map<String, dynamic>;
       return UserRead.fromMap(data);
     } else {
-      throw Exception('Failed to create user');
+      throw ApiException(
+        message: result['message'] ?? 'Failed to create user',
+        responseBody: result,
+      );
     }
   }
 
-  Future<UserRead> updateUser({
-    required String token,
-    required UserUpdate userUpdate,
-  }) async {
-    final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    };
-    final response = await _client.patch(
-      Uri.parse('$_baseUrl/user'),
-      headers: headers,
+  Future<UserRead> updateUser({required UserUpdate userUpdate}) async {
+    final result = await _apiService.patch(
+      '/user',
       body: userUpdate.toJson(),
     );
 
-    if (response.statusCode == 201) {
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      final data = json['data'] as Map<String, dynamic>;
+    if (result['success']) {
+      final data = result['data'] as Map<String, dynamic>;
       return UserRead.fromMap(data);
     } else {
-      throw Exception('Failed to update user');
+      throw ApiException(
+        message: result['message'] ?? 'Failed to update user',
+        responseBody: result,
+      );
     }
   }
 }

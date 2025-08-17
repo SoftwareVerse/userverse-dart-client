@@ -1,39 +1,45 @@
-import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:userverse_dart_client/src/models/models.dart';
 import 'package:userverse_dart_client/src/services/company_role_service.dart';
+import 'package:userverse_dart_client/src/utils/base_api.dart';
 
+import 'user_service_test.mocks.dart';
 
-@GenerateMocks([http.Client])
+@GenerateMocks([BaseApiService])
 void main() {
   group('CompanyRoleService', () {
-    late http.Client client;
+    late MockBaseApiService mockBaseApiService;
     late CompanyRoleService companyRoleService;
 
     setUp(() {
-      client = MockClient();
-      companyRoleService =
-          CompanyRoleService(client: client, baseUrl: 'https://api.test');
+      mockBaseApiService = MockBaseApiService();
+      companyRoleService = CompanyRoleService(mockBaseApiService);
     });
 
     test('getCompanyRoles success', () async {
       when(
-        client.get(
+        mockBaseApiService.get(
           any,
-          headers: anyNamed('headers'),
+          queryParams: anyNamed('queryParams'),
         ),
       ).thenAnswer(
-        (_) async => http.Response(
-          '{"data": {"records": [], "pagination": {"total_records": 0, "limit": 10, "page": 1, "total_pages": 0}}}',
-          200,
-        ),
+        (_) async => {
+          'success': true,
+          'data': {
+            'records': [],
+            'pagination': {
+              'total_records': 0,
+              'limit': 10,
+              'page': 1,
+              'total_pages': 0
+            }
+          },
+        },
       );
 
       final roles = await companyRoleService.getCompanyRoles(
-        token: 'abc',
         companyId: 1,
       );
 
@@ -42,20 +48,18 @@ void main() {
 
     test('createRole success', () async {
       when(
-        client.post(
+        mockBaseApiService.post(
           any,
-          headers: anyNamed('headers'),
           body: anyNamed('body'),
         ),
       ).thenAnswer(
-        (_) async => http.Response(
-          '{"data": {"name": "Admin", "description": "admin role"}}',
-          201,
-        ),
+        (_) async => {
+          'success': true,
+          'data': {'name': 'Admin', 'description': 'admin role'},
+        },
       );
 
       final role = await companyRoleService.createRole(
-        token: 'abc',
         companyId: 1,
         roleCreate: RoleCreate(name: 'Admin'),
       );
