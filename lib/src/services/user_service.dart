@@ -3,7 +3,9 @@ import '../utils/base_api.dart';
 import '../utils/hash_password.dart';
 
 class UserService {
-  UserService(this._apiService);
+  UserService(
+    this._apiService,
+  );
 
   final BaseApiService _apiService;
 

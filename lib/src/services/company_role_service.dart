@@ -2,7 +2,9 @@ import '../models/models.dart';
 import '../utils/base_api.dart';
 
 class CompanyRoleService {
-  CompanyRoleService(this._apiService);
+  CompanyRoleService(
+    this._apiService,
+  );
 
   final BaseApiService _apiService;
 
