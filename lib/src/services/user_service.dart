@@ -9,25 +9,24 @@ class UserService {
 
   final BaseApiService _apiService;
 
-  Future<TokenResponse> login({
-    required String username,
+  Future<ResponseModel<TokenResponseModel>> login({
+    required String email,
     required String password,
   }) async {
-    final hashedPassword = AuthUtil.hashPassword(password);
-    final result = await _apiService.patch(
-      '/user/login',
-      basicAuthUsername: username,
-      basicAuthPassword: hashedPassword,
+    final basicHeader = AuthUtil.buildBasicAuthHeader(
+      email: email,
+      password: password,
     );
-    if (result['success']) {
-      final data = result['data'] as Map<String, dynamic>;
-      return TokenResponse.fromMap(data);
-    } else {
-      throw ApiException(
-        message: result['message'] ?? 'Failed to login',
-        responseBody: result,
-      );
-    }
+
+    final result = await _apiService.patch(
+      'user/login',
+      additionalHeaders: basicHeader,
+    );
+
+    return ResponseModel<TokenResponseModel>.fromJson(
+      result,
+      (data) => TokenResponseModel.fromJson(data as String),
+    );
   }
 
   Future<UserRead> getMe() async {

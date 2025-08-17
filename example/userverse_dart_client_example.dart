@@ -7,13 +7,14 @@ void main() async {
   try {
     // 2. Login
     print('Logging in...');
-    final token = await client.users.login(
-      username: 'YOUR_USERNAME', // Replace with your username
+    final response = await client.users.login(
+      email: 'YOUR_USERNAME', // Replace with your username
       password: 'YOUR_PASSWORD', // Replace with your password
     );
-    final accessToken = token.accessToken;
+    final accessToken = response.success;
     print('Logged in successfully!');
     print('Access token: $accessToken');
+
 
     // Set the token for all subsequent requests
     client.setBearerToken(accessToken);

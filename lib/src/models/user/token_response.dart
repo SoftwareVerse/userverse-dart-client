@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class TokenResponse {
-  TokenResponse({
+class TokenResponseModel {
+  TokenResponseModel({
     this.tokenType,
     required this.accessToken,
     required this.accessTokenExpiration,
@@ -9,11 +9,11 @@ class TokenResponse {
     required this.refreshTokenExpiration,
   });
 
-  factory TokenResponse.fromJson(String source) =>
-      TokenResponse.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory TokenResponseModel.fromJson(String source) =>
+      TokenResponseModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  factory TokenResponse.fromMap(Map<String, dynamic> map) {
-    return TokenResponse(
+  factory TokenResponseModel.fromMap(Map<String, dynamic> map) {
+    return TokenResponseModel(
       tokenType: map['token_type'] as String?,
       accessToken: map['access_token'] as String,
       accessTokenExpiration: map['access_token_expiration'] as String,
@@ -27,14 +27,14 @@ class TokenResponse {
   final String refreshToken;
   final String refreshTokenExpiration;
 
-  TokenResponse copyWith({
+  TokenResponseModel copyWith({
     String? tokenType,
     String? accessToken,
     String? accessTokenExpiration,
     String? refreshToken,
     String? refreshTokenExpiration,
   }) {
-    return TokenResponse(
+    return TokenResponseModel(
       tokenType: tokenType ?? this.tokenType,
       accessToken: accessToken ?? this.accessToken,
       accessTokenExpiration:
@@ -59,11 +59,11 @@ class TokenResponse {
 
   @override
   String toString() {
-    return 'TokenResponse(tokenType: $tokenType, accessToken: $accessToken, accessTokenExpiration: $accessTokenExpiration, refreshToken: $refreshToken, refreshTokenExpiration: $refreshTokenExpiration)';
+    return 'TokenResponseModel(tokenType: $tokenType, accessToken: $accessToken, accessTokenExpiration: $accessTokenExpiration, refreshToken: $refreshToken, refreshTokenExpiration: $refreshTokenExpiration)';
   }
 
   @override
-  bool operator ==(covariant TokenResponse other) {
+  bool operator ==(covariant TokenResponseModel other) {
     if (identical(this, other)) return true;
 
     return other.tokenType == tokenType &&
