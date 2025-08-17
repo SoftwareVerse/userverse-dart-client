@@ -1,5 +1,7 @@
 import 'package:http/http.dart' as http;
+import '../services/company_role_service.dart';
 import '../services/company_service.dart';
+import '../services/company_user_service.dart';
 import '../services/user_service.dart';
 
 class UserverseClient {
@@ -17,6 +19,16 @@ class UserverseClient {
   );
 
   late final CompanyService companies = CompanyService(
+    client: _client,
+    baseUrl: baseUrl,
+  );
+
+  late final CompanyRoleService companyRoles = CompanyRoleService(
+    client: _client,
+    baseUrl: baseUrl,
+  );
+
+  late final CompanyUserService companyUsers = CompanyUserService(
     client: _client,
     baseUrl: baseUrl,
   );

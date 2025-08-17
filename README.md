@@ -41,24 +41,35 @@ void main() async {
       username: 'YOUR_USERNAME', // Replace with your username
       password: 'YOUR_PASSWORD', // Replace with your password
     );
+    final accessToken = token.accessToken;
     print('Logged in successfully!');
-    print('Access token: ${token.accessToken}');
+    print('Access token: $accessToken');
 
     // 3. Get current user
     print('\\nGetting current user...');
-    final user = await client.users.getMe(token: token.accessToken);
+    final user = await client.users.getMe(token: accessToken);
     print('Current user: ${user.email}');
 
     // 4. Create a company
     print('\\nCreating a company...');
     final company = await client.companies.createCompany(
-      token: token.accessToken,
+      token: accessToken,
       companyCreate: CompanyCreate(
         name: 'My Awesome Company',
         email: 'company@example.com',
       ),
     );
     print('Company created: ${company.name}');
+
+    // 5. Add a user to the company
+    print('\\nAdding a user to the company...');
+    await client.companyUsers.addUserToCompany(
+      token: accessToken,
+      companyId: company.id,
+      companyUserAdd: CompanyUserAdd(email: 'new.user@example.com'),
+    );
+    print('User added to company');
+
   } catch (e) {
     print('An error occurred: $e');
   }
@@ -70,7 +81,9 @@ void main() async {
 The client is organized into services:
 
 - `client.users`: Handles user-related operations.
-- `client.companies`: Handles company-related operations.
+- `client.companies`: Handles company-related operations (creating, reading, updating companies).
+- `client.companyUsers`: Handles user management within a company.
+- `client.companyRoles`: Handles role management within a company.
 
 Each service provides methods that correspond to the API endpoints.
 
