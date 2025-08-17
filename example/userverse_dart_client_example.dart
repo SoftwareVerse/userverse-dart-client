@@ -16,6 +16,32 @@ void main() async {
     print('Access token: $accessToken');
 
 
+    // Set the token for all subsequent requests
+    client.setBearerToken(accessToken);
+
+    // 3. Get current user
+    print('\\nGetting current user...');
+    final user = await client.users.getMe();
+    print('Current user: ${user.email}');
+
+    // 4. Create a company
+    print('\\nCreating a company...');
+    final company = await client.companies.createCompany(
+      companyCreate: CompanyCreate(
+        name: 'My Awesome Company',
+        email: 'company@example.com',
+      ),
+    );
+    print('Company created: ${company.name}');
+
+    // 5. Add a user to the company
+    print('\\nAdding a user to the company...');
+    await client.companyUsers.addUserToCompany(
+      companyId: company.id,
+      companyUserAdd: CompanyUserAdd(email: 'new.user@example.com'),
+    );
+    print('User added to company');
+
   } catch (e) {
     print('An error occurred: $e');
   }

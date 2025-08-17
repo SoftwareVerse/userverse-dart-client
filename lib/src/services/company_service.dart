@@ -2,6 +2,7 @@ import '../models/models.dart';
 import '../utils/base_api.dart';
 
 class CompanyService {
+
   CompanyService({this._apiService = const BaseApiService(
     http.Client(),
     'https://api.example.com', // Replace with your actual base URL

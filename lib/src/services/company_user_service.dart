@@ -2,7 +2,9 @@ import '../models/models.dart';
 import '../utils/base_api.dart';
 
 class CompanyUserService {
-  CompanyUserService(this._apiService);
+  CompanyUserService(
+    this._apiService,
+  );
 
   final BaseApiService _apiService;
 
