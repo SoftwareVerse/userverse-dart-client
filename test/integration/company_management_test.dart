@@ -8,6 +8,7 @@ void main() {
 
     setUpAll(() async {
       client = UserverseClient();
+      token = '';
       // IMPORTANT: Replace with actual credentials for testing
       const username = 'YOUR_TEST_USERNAME';
       const password = 'YOUR_TEST_PASSWORD';
@@ -22,6 +23,7 @@ void main() {
         password: password,
       );
       token = tokenResponse.accessToken;
+      client.setAuthToken(token);
     });
 
     test('Create, get and update company', () async {
@@ -35,7 +37,6 @@ void main() {
 
       // Create company
       final createdCompany = await client.companies.createCompany(
-        token: token,
         companyCreate: CompanyCreate(
           name: 'Test Company',
           email: companyEmail,
@@ -45,14 +46,12 @@ void main() {
 
       // Get company
       final gotCompany = await client.companies.getCompany(
-        token: token,
         companyId: createdCompany.id,
       );
       expect(gotCompany.id, createdCompany.id);
 
       // Update company
       final updatedCompany = await client.companies.updateCompany(
-        token: token,
         companyId: createdCompany.id,
         companyUpdate: CompanyUpdate(
           name: 'Updated Test Company',

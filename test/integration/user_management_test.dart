@@ -26,7 +26,8 @@ void main() {
 
       expect(token.accessToken, isNotEmpty);
 
-      final user = await client.users.getMe(token: token.accessToken);
+      client.setAuthToken(token.accessToken);
+      final user = await client.users.getMe();
 
       expect(user.email, username);
     });
