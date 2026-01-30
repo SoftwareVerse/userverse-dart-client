@@ -3,8 +3,8 @@ import 'package:userverse_dart_client/userverse_dart_client.dart';
 void main() async {
   // 1. Create a client
   // You can specify a custom baseUrl if needed:
-  // final client = UserverseClient(baseUrl: 'https://api.your-domain.com');
-  final client = UserverseClient();
+  final client = UserverseClient(baseUrl: 'https://apps.oxillium-api.co.za/userverse');
+  // final client = UserverseClient();
 
   try {
     // -------------------------------------------------------------------------
