@@ -190,15 +190,19 @@ class BaseApiService {
     Map<String, String>? additionalHeaders,
     String? basicAuthUsername,
     String? basicAuthPassword,
+    Map<String, String>? queryParams,
   }) async {
     final headers = _prepareHeaders(additionalHeaders);
     if (basicAuthUsername != null && basicAuthPassword != null) {
-      final creds = base64Encode(utf8.encode('$basicAuthUsername:$basicAuthPassword'));
+      final creds =
+          base64Encode(utf8.encode('$basicAuthUsername:$basicAuthPassword'));
       headers['Authorization'] = 'Basic $creds';
     }
+    final uri =
+        Uri.parse(_buildUrl(endpoint)).replace(queryParameters: queryParams);
     return _makeRequest(
       () => _client.post(
-        Uri.parse(_buildUrl(endpoint)),
+        uri,
         headers: headers,
         body: body != null ? jsonEncode(body) : null,
       ),
@@ -210,11 +214,22 @@ class BaseApiService {
     String endpoint, {
     dynamic body,
     Map<String, String>? additionalHeaders,
+    String? basicAuthUsername,
+    String? basicAuthPassword,
+    Map<String, String>? queryParams,
   }) async {
+    final headers = _prepareHeaders(additionalHeaders);
+    if (basicAuthUsername != null && basicAuthPassword != null) {
+      final creds = base64Encode(
+          utf8.encode('$basicAuthUsername:$basicAuthPassword'));
+      headers['Authorization'] = 'Basic $creds';
+    }
+    final uri =
+        Uri.parse(_buildUrl(endpoint)).replace(queryParameters: queryParams);
     return _makeRequest(
       () => _client.patch(
-        Uri.parse(_buildUrl(endpoint)),
-        headers: _prepareHeaders(additionalHeaders),
+        uri,
+        headers: headers,
         body: body != null ? jsonEncode(body) : null,
       ),
     );
@@ -225,10 +240,13 @@ class BaseApiService {
     String endpoint, {
     dynamic body,
     Map<String, String>? additionalHeaders,
+    Map<String, String>? queryParams,
   }) async {
+    final uri =
+        Uri.parse(_buildUrl(endpoint)).replace(queryParameters: queryParams);
     return _makeRequest(
       () => _client.put(
-        Uri.parse(_buildUrl(endpoint)),
+        uri,
         headers: _prepareHeaders(additionalHeaders),
         body: body != null ? jsonEncode(body) : null,
       ),
@@ -240,8 +258,11 @@ class BaseApiService {
     String endpoint, {
     dynamic body,
     Map<String, String>? additionalHeaders,
+    Map<String, String>? queryParams,
   }) async {
-    final request = http.Request('DELETE', Uri.parse(_buildUrl(endpoint)));
+    final uri =
+        Uri.parse(_buildUrl(endpoint)).replace(queryParameters: queryParams);
+    final request = http.Request('DELETE', uri);
     request.headers.addAll(_prepareHeaders(additionalHeaders));
     if (body != null) {
       request.body = jsonEncode(body);
